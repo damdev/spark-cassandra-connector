@@ -34,7 +34,8 @@ lazy val integrationTestsWithFixtures = taskKey[Map[TestDefinition, Seq[String]]
   "Fixtures sub-traits for each test. Sets of fixture sub-traits names are used to form group tests.")
 
 lazy val commonSettings = Seq(
-  // dependency updates check
+  publishArtifact in (Compile, packageDoc) := false,
+    // dependency updates check
   dependencyUpdatesFailBuild := true,
   dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang" | "org.eclipse.jetty"),
   fork := true,
@@ -82,6 +83,7 @@ lazy val connector = (project in file("connector"))
     libraryDependencies ++= Dependencies.Spark.dependencies
       ++ Dependencies.TestConnector.dependencies
       ++ Dependencies.Jetty.dependencies
+      :+ ("org.scala-lang" % "scala-reflect" % scalaVersion.value)
   )
   .dependsOn(
     testSupport % "test",
